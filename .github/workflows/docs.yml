@@ -2,20 +2,18 @@ name: Docs
 
 # Publishes the contents of the `docs/` folder to GitHub Pages and to the repository wiki.
 #
-# Nothing is deployed automatically yet: this workflow only runs when it is started manually
-# from the Actions tab ("Run workflow") or when the Release workflow calls it for a `v*` tag.
-#
-# To publish on every documentation change, uncomment the `push` trigger below.
+# Runs automatically on documentation changes (`push` to `master`/`main` below), manually from
+# the Actions tab ("Run workflow"), or when the Release workflow calls it for a `v*` tag.
 on:
   workflow_dispatch:
   workflow_call:
-  # push:
-  #   branches: [ master ]
-  #   paths:
-  #     - 'docs/**'
-  #     - 'screenshot*.png'
-  #     - 'LICENSE.txt'
-  #     - '.github/workflows/docs.yml'
+  push:
+    branches: [ master, main ]
+    paths:
+      - 'docs/**'
+      - 'screenshot*.png'
+      - 'LICENSE.txt'
+      - '.github/workflows/docs.yml'
 
 concurrency:
   group: docs-${{ github.ref }}
@@ -50,6 +48,15 @@ jobs:
               cp "$file" site/
             fi
           done
+
+          # GitHub Pages' jekyll-optional-front-matter plugin denylists community files such
+          # as CONTRIBUTING unless they carry YAML front matter, which would leave
+          # contributing.md as a raw download. Add the front matter to the site copy only so
+          # the wiki copy stays plain markdown.
+          if [ -f site/contributing.md ] && [ "$(head -n 1 site/contributing.md)" != "---" ]; then
+            { printf -- '---\nlayout: default\n---\n\n'; cat site/contributing.md; } > site/contributing.tmp
+            mv site/contributing.tmp site/contributing.md
+          fi
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
