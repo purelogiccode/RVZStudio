@@ -126,8 +126,9 @@ Key behaviors:
    `lz4` are DolphinTool-only. An optional Scrub setting zeroes non-game Wii partitions before
    encoding.
 4. **Fallback and reporting** — expected user-input failures (corrupt files, format mismatches)
-   are logged at Information level and the file is retried with DolphinTool; unexpected library
-   failures are logged at Error level, which automatically forwards them to the bug-report API.
+   and resource limits (`OutOfMemoryException`) are logged at Information level and the file is
+   retried with DolphinTool; unexpected library failures are logged at Error level, which
+   automatically forwards them to the bug-report API.
 
 ## Verification and extraction pipelines
 

@@ -21,11 +21,23 @@ images back to ISO, WBFS, GCZ, WIA, CISO or TGC. It runs on **Windows, Linux and
 | [Building](building.md) | Building, testing, publishing and the CI/CD pipelines. |
 | [Contributing](contributing.md) | How to report issues and submit changes. |
 
+## Downloads
+
+Every release is published on the
+[Releases page](https://github.com/purelogiccode/RVZStudio/releases) as
+`release_<version>_<rid>.zip`, for `win-x64`, `win-arm64`, `linux-x64`, `linux-arm64`, `osx-x64`
+and `osx-arm64`. The latest version is **2.5.1**.
+
+All bundles are framework-dependent single-file builds: install the
+[.NET 10.0 Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) once, then extract and run
+`RVZStudio.exe` (Windows) or `./RVZStudio` (Linux/macOS). The `7za` archive fallback ships in every
+bundle and the optional `DolphinTool` fallback engine ships with the Windows bundles.
+
 ## What RVZStudio does
 
 - **Batch conversion** — convert many ISO, GCM, WBFS, GCZ, WIA, CISO/WBI, TGC, NFS, NKIT.ISO,
   ZIP, 7Z and RAR inputs to RVZ in a single run, with an optional Scrub setting for Wii discs.
-- **Native RVZ engine** — the built-in [RVZSharp](https://github.com/purelogiccode/RVZSharp)
+- **Native RVZ engine** — the built-in [RVZSharp](https://github.com/purelogiccode/RVZSharp) 1.1.1
   library encodes, decodes and verifies disc images natively, with automatic fallback to
   DolphinTool when needed.
 - **Integrity verification** — check existing RVZ files with the native volume verifier

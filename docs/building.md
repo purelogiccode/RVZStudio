@@ -68,20 +68,26 @@ the runtime.
 Results:
 
 ```
-publish/
-├── win-x64/        # RVZStudio.exe + helper tools + license/readme/notes
-├── win-arm64/
-├── linux-x64/
-├── linux-arm64/
-├── osx-x64/
-├── osx-arm64/
+RVZStudio/bin/Release/                    # release path: history is kept, never cleaned
 ├── release_<version>_win-x64.zip
 ├── release_<version>_win-arm64.zip
 ├── release_<version>_linux-x64.zip
 ├── release_<version>_linux-arm64.zip
 ├── release_<version>_osx-x64.zip
 └── release_<version>_osx-arm64.zip
+
+publish/                                  # scratch staging output (safe to delete)
+├── win-x64/        # RVZStudio.exe + helper tools + license/readme/notes
+├── win-arm64/
+├── linux-x64/
+├── linux-arm64/
+├── osx-x64/
+└── osx-arm64/
 ```
+
+The bundle name follows the release convention `release_<version>_<rid>.zip` used by every
+historical release and linked from the update check. The release path keeps older bundles, so a
+new publish only refreshes the ZIP for the current version.
 
 Useful switches:
 
@@ -90,7 +96,8 @@ Useful switches:
 | `-Rids win-x64,linux-x64` | Publish only the listed runtime identifiers. |
 | `-Configuration Debug` | Publish a debug build. |
 | `-SelfContained` | Embed the .NET runtime (larger bundles, no runtime required). |
-| `-NoZip` | Skip ZIP creation. |
+| `-OutputPath <dir>` | Write the bundles somewhere other than `RVZStudio/bin/Release`. |
+| `-NoZip` | Skip ZIP creation (staging output in `publish/<rid>` only). |
 
 ### Manual publish
 
@@ -125,14 +132,15 @@ Runs on every push to `master`/`main`, on pull requests, and manually.
 
 ### `release.yml` — publish and release
 
-Triggered by pushing a tag that starts with `v` (for example `v2.5.0`) or manually from the
+Triggered by pushing a tag that starts with `v` (for example `v2.5.1`) or manually from the
 Actions tab.
 
 1. A six-entry matrix publishes every runtime identifier on a matching runner and uploads the
-   `release_<version>_<rid>.zip` files as artifacts.
+   `RVZStudio/bin/Release/release_<version>_<rid>.zip` bundles as artifacts.
 2. A final job downloads all artifacts and creates a GitHub Release with auto-generated release
    notes and the ZIP files attached. The release job only runs for tag builds.
-3. After the release is created, the `docs.yml` workflow is called to publish the documentation.
+3. After the release is created, the `docs.yml` workflow is called to publish the documentation
+   site and the wiki.
 
 ### `docs.yml` — publish the documentation
 
@@ -149,9 +157,11 @@ Prerequisites, configured once in the repository settings:
 | `WIKI_TOKEN` secret — a classic PAT with the `repo` scope (recommended; the default `GITHUB_TOKEN` may not be allowed to push to wikis) | Settings → Secrets and variables → Actions |
 
 The Pages job builds the docs with Jekyll (`docs/_config.yml` enables the relative-link and
-README-index plugins) and deploys the generated site. The wiki job copies `docs/*.md` into the
-wiki repository, maps `README.md` to `Home`, rewrites relative links to wiki page names and
-creates a `_Sidebar.md` navigation page on the first run.
+README-index plugins) and deploys the generated site; its side menu lives in
+`docs/_layouts/default.html`. The wiki job copies `docs/*.md` into the wiki repository, maps
+`README.md` to `Home`, rewrites relative links to wiki page names and uses the checked-in
+`docs/_Sidebar.md` as the wiki side menu (a default sidebar is created if the file is ever
+missing).
 
 ### Cutting a release
 
@@ -161,8 +171,8 @@ creates a `_Sidebar.md` navigation page on the first run.
 3. Tag and push:
 
    ```bash
-   git tag v2.5.0
-   git push origin v2.5.0
+   git tag v2.5.1
+   git push origin v2.5.1
    ```
 
 4. The Release workflow builds and attaches the six ZIP archives, then publishes the

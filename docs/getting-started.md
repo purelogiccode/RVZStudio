@@ -28,6 +28,21 @@ RVZStudio locates the helper tools next to the application binary. The expected 
 
 ## Installation
 
+Download the bundle for your platform from the
+[Releases page](https://github.com/purelogiccode/RVZStudio/releases). The latest version is
+**2.5.1**:
+
+| Platform | x64 | ARM64 |
+|----------|-----|-------|
+| Windows | `release_<version>_win-x64.zip` | `release_<version>_win-arm64.zip` |
+| Linux | `release_<version>_linux-x64.zip` | `release_<version>_linux-arm64.zip` |
+| macOS | `release_<version>_osx-x64.zip` | `release_<version>_osx-arm64.zip` |
+
+Every bundle is a framework-dependent single-file build: install the
+[.NET 10.0 Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) once, then extract the
+bundle and run the application. Each bundle already contains the `7za` archive fallback and, on
+Windows, the optional `DolphinTool` fallback engine.
+
 ### Windows
 
 1. Download `release_<version>_win-x64.zip` or `release_<version>_win-arm64.zip` from the
@@ -43,7 +58,7 @@ RVZStudio locates the helper tools next to the application binary. The expected 
 
    ```bash
    mkdir -p ~/apps/RVZStudio
-   unzip release_2.5.0_linux-x64.zip -d ~/apps/RVZStudio
+   unzip release_2.5.1_linux-x64.zip -d ~/apps/RVZStudio
    cd ~/apps/RVZStudio
    chmod +x RVZStudio 7za*
    ./RVZStudio
@@ -58,7 +73,7 @@ RVZStudio locates the helper tools next to the application binary. The expected 
 
    ```bash
    mkdir -p ~/Applications/RVZStudio
-   unzip release_2.5.0_osx-arm64.zip -d ~/Applications/RVZStudio
+   unzip release_2.5.1_osx-arm64.zip -d ~/Applications/RVZStudio
    cd ~/Applications/RVZStudio
    chmod +x RVZStudio 7za*
    ./RVZStudio

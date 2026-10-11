@@ -50,6 +50,17 @@ xattr -dr com.apple.quarantine .
 - **RVZSharp fallback** — if the native engine cannot handle a file it automatically uses
   DolphinTool (when available). A message such as `falling back to DolphinTool` in the log is normal.
 
+## "Out of memory" while encoding
+
+- RVZStudio 2.5.1 updates the native engine (RVZSharp 1.1.1) so the encoder is sized to the block
+  being compressed; the maximum `zstd` level (22) no longer reserves ~128 MB per worker and stays
+  usable on typical machines.
+- If memory still runs out, the log states that the native engine ran out of memory and fell back
+  to DolphinTool. The file is still produced when DolphinTool is available (Windows bundles ship
+  it; on Linux/macOS place a `DolphinTool` binary next to the application to enable the fallback).
+- On very low-memory systems, close other memory-heavy applications or lower the compression level
+  and block size in the [Settings Reference](settings-reference.md).
+
 ## Verification reports failures
 
 Verification runs the native RVZSharp volume verifier first and falls back to DolphinTool's

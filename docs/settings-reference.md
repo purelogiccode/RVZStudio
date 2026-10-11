@@ -29,6 +29,12 @@ The slider range adapts to the selected method (see the table above). Higher lev
 better but take longer. If you switch to a method with a smaller range, the level is clamped
 automatically.
 
+> **Memory:** the highest `zstd` levels (20 – 22) use much more memory than the default level 5.
+> RVZStudio 2.5.1 updates the native engine (RVZSharp 1.1.1) so the encoder is sized to the block
+> being compressed instead of reserving the level's full window, which keeps level 22 usable on
+> typical machines. If the system still runs out of memory, the conversion falls back to
+> DolphinTool automatically and logs the reason instead of reporting an error.
+
 ### Block size
 
 The block size is the granularity at which the RVZ container stores compressed data.

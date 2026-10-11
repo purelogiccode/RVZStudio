@@ -43,7 +43,8 @@ Full documentation lives in the [`docs/`](docs/README.md) folder:
 
 ## What's New
 
-**Version 2.5.0** is the first cross-platform release, rebuilt on Avalonia UI. See the
+**Version 2.5.1** updates the built-in RVZSharp engine to 1.1.1, fixing out-of-memory failures
+when encoding with the maximum Zstd compression level. See the
 [What's New](docs/WhatsNew.md) page for the full list of changes.
 
 ## Overview
@@ -330,11 +331,12 @@ See the [Building guide](docs/building.md) for full instructions.
 
 ### Publishing
 The `publish.ps1` script produces framework-dependent, single-file builds for every supported
-platform (`win-x64`, `win-arm64`, `linux-x64`, `linux-arm64`, `osx-x64`, `osx-arm64`) into the
-`publish/` folder and packages each one as `release_<version>_<rid>.zip` with the license, readme
-and What's New files. The DolphinTool/7za helper executables are placed next to the application
-binary so they can be launched as child processes. Pass `-SelfContained` to embed the .NET runtime
-instead (larger bundles, no runtime required on the target machine).
+platform (`win-x64`, `win-arm64`, `linux-x64`, `linux-arm64`, `osx-x64`, `osx-arm64`) and packages
+each one into the `RVZStudio/bin/Release/` release path as `release_<version>_<rid>.zip` with the
+license, readme and What's New files; older bundles are kept next to the new one. Unpacked staging
+output is written to `publish/<rid>/`. The DolphinTool/7za helper executables are placed next to
+the application binary so they can be launched as child processes. Pass `-SelfContained` to embed
+the .NET runtime instead (larger bundles, no runtime required on the target machine).
 
 ```powershell
 ./publish.ps1

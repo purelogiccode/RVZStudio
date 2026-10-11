@@ -45,7 +45,7 @@ jobs:
 
           # The docs reference files that live one level above the docs folder with "../".
           # Copying them to the site root keeps those relative links working.
-          for file in screenshot.png screenshot2.png screenshot3.png LICENSE.txt; do
+          for file in screenshot.png screenshot2.png screenshot3.png screenshot4.png LICENSE.txt; do
             if [ -f "$file" ]; then
               cp "$file" site/
             fi
@@ -120,6 +120,7 @@ jobs:
             -e "s@\]\(\.\./screenshot\.png\)@](https://raw.githubusercontent.com/${REPO}/${BRANCH}/screenshot.png)@g" \
             -e "s@\]\(\.\./screenshot2\.png\)@](https://raw.githubusercontent.com/${REPO}/${BRANCH}/screenshot2.png)@g" \
             -e "s@\]\(\.\./screenshot3\.png\)@](https://raw.githubusercontent.com/${REPO}/${BRANCH}/screenshot3.png)@g" \
+            -e "s@\]\(\.\./screenshot4\.png\)@](https://raw.githubusercontent.com/${REPO}/${BRANCH}/screenshot4.png)@g" \
             -e "s@\]\(\.\./LICENSE\.txt\)@](https://github.com/${REPO}/blob/${BRANCH}/LICENSE.txt)@g" \
             -e "s@\]\(README\.md(#[^)]*)?\)@](Home\1)@g" \
             -e "s@\]\(([A-Za-z0-9_-]+)\.md(#[^)]*)?\)@](\1\2)@g"

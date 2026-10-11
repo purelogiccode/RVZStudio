@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-${{ matrix.rid }}
-          path: publish/release_*_${{ matrix.rid }}.zip
+          path: RVZStudio/bin/Release/release_*_${{ matrix.rid }}.zip
           if-no-files-found: error
 
   release:

@@ -163,6 +163,17 @@ public class RvzSharpService
                 Path.GetFileName(inputFile), ex.Message);
             return false;
         }
+        catch (OutOfMemoryException ex)
+        {
+            // High levels (Zstd 22) with many parallel workers can exhaust memory on modest
+            // machines. This is an expected resource limit, not a defect, and DolphinTool
+            // still produces the file, so log it below the bug-report threshold.
+            TryDeletePartialOutput(outputFile);
+            _logger.Information(ex,
+                "RVZSharp ran out of memory while encoding {FileName} (compression: {CompressionMethod}, level: {CompressionLevel}, block size: {BlockSize}, scrub: {Scrub}). Falling back to DolphinTool.",
+                Path.GetFileName(inputFile), compressionMethod, compressionLevel, blockSize, scrub);
+            return false;
+        }
         catch (Exception ex)
         {
             TryDeletePartialOutput(outputFile);
@@ -298,6 +309,16 @@ public class RvzSharpService
                 Path.GetFileName(inputFile), ex.Message);
             return false;
         }
+        catch (OutOfMemoryException ex)
+        {
+            // An expected resource limit rather than a defect; DolphinTool still produces
+            // the file, so log it below the bug-report threshold.
+            TryDeletePartialOutput(outputFile);
+            _logger.Information(ex,
+                "RVZSharp ran out of memory while writing {OutputFormat} for {FileName}. Falling back to DolphinTool.",
+                format.ToUpperInvariant(), Path.GetFileName(inputFile));
+            return false;
+        }
         catch (Exception ex)
         {
             TryDeletePartialOutput(outputFile);
@@ -365,6 +386,15 @@ public class RvzSharpService
             _logger.Information(
                 "RVZSharp could not verify {FileName}: {Message}. Falling back to DolphinTool.",
                 fileName, ex.Message);
+            return null;
+        }
+        catch (OutOfMemoryException ex)
+        {
+            // An expected resource limit rather than a defect; DolphinTool still verifies
+            // the file, so log it below the bug-report threshold.
+            _logger.Information(ex,
+                "RVZSharp ran out of memory while verifying {FileName}. Falling back to DolphinTool.",
+                fileName);
             return null;
         }
         catch (Exception ex)

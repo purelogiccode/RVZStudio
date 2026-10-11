@@ -1,5 +1,28 @@
 # What's New
 
+## Version 2.5.1
+
+RVZStudio 2.5.1 is a maintenance release that fixes out-of-memory failures when encoding with
+the highest Zstd compression levels and updates the built-in **RVZSharp** engine to **1.1.1**.
+
+### Fixes
+
+- Fixed encoding with the maximum **Zstd** level (22) and many parallel workers failing with an
+  `OutOfMemoryException`. The engine no longer reserves the level's full compression window per
+  worker (up to ~128 MiB each at level 22); the window is now sized to the chunk being encoded.
+- Out-of-memory conditions during encoding, decoding or verification are now logged as expected
+  resource limits instead of spurious bug reports; the DolphinTool fallback still completes the
+  operation when memory is exhausted.
+
+### Packaging and documentation
+
+- Release bundles keep the framework-dependent single-file layout and the
+  `release_<version>_<rid>.zip` naming for `win-x64`, `win-arm64`, `linux-x64`, `linux-arm64`,
+  `osx-x64` and `osx-arm64`; they are now written to the `RVZStudio/bin/Release` release path so
+  older bundles stay available next to the new one.
+- The documentation site and the repository wiki are published from the same `docs/` folder and
+  now share a side menu for easier navigation.
+
 ## Version 2.5.0
 
 RVZStudio 2.5.0 is the first cross-platform release: the WPF/Windows-only application has been
